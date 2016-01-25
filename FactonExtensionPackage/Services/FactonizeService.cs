@@ -96,6 +96,19 @@
 				|| (projectItem.Name.EndsWith(".config", StringComparison.CurrentCulture)))
 			{
 				bool opened = projectItem.TryOpen();
+				try
+				{
+					
+					var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+					dte.ExecuteCommand("Edit.RemoveUsings");
+					dte.ExecuteCommand("ProjectandSolutionContextMenus.Project.PowerCommands.RemoveandSortUsings");
+					dte.ExecuteCommand("ReSharper_SilentCleanupCode");
+				}
+				catch (Exception ex)
+				{
+					// ignored
+				}
+			
 				InternalExecute(projectItem);
 				projectItem.TryClose(opened);
 			}
@@ -118,6 +131,10 @@
 				FactonizeCurrentProjectCommand.Execute(projectItem);
 				FormalLineOneByOneCommand.Execute(projectItem);
 				AddCommentsToCodeElements.Execute(projectItem);
+				if (projectItem.IsModuleClass())
+				{
+					ModuleClassService.VerifyConfiguration(projectItem);
+				}
 			}
 			if (projectItem.Name.EndsWith(".config", StringComparison.CurrentCulture))
 			{

@@ -32,7 +32,7 @@
 
 			var services = moduleText.Matches(@".GetObject\<(?<element>[^\>]+)\>");
 			var runtimeServices = moduleText.Matches(@".GetRuntimeObject\<(?<element>[^\>]+)\>");
-			var providedServices = moduleText.Matches(@".RegisterInstance\<(?<element>[^\>]+)\>");			
+			var providedServices = moduleText.Matches(@".RegisterInstance\<(?<element>[^\>]+)\>");
 
 			var configFiles = dte.Solution.FindProjectItems(
 				p => p.Name.Contains("Facton") && !p.IsTestProject(),

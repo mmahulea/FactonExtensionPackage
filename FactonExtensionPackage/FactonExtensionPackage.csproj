@@ -59,6 +59,7 @@
     <Compile Include="FormatingCommands\SubCommands\FactonizeModuleCommand.cs" />
     <Compile Include="Services\ConfigFileEditorService.cs" />
     <Compile Include="Services\FactonizeService.cs" />
+    <Compile Include="Services\ModuleClassService.cs" />
     <Compile Include="Services\ModuleSystemService.cs" />
     <Compile Include="SolutionExplorerCommands\FactonizeEverythingInProjectCommand.cs" />
     <Compile Include="SolutionExplorerCommands\FactonizeEverythingInSolutionFolderCommand.cs" />

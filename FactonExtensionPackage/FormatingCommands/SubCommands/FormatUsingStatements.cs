@@ -1,5 +1,6 @@
 ﻿namespace FactonExtensionPackage.FormatingCommands.SubCommands
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using EnvDTE;
@@ -22,16 +23,24 @@
 			{
 				try
 				{
-					projectItem.DTE.ExecuteCommand("Edit.RemoveAndSort");
+					projectItem.DTE.ExecuteCommand("ProjectandSolutionContextMenus.Project.PowerCommands.RemoveandSortUsings");
 				}
-				catch
+				catch (Exception)
 				{
 					try
 					{
-						projectItem.DTE.ExecuteCommand("Edit.SortUsings");
+						projectItem.DTE.ExecuteCommand("Edit.RemoveAndSort");
 					}
-					catch { }
+					catch
+					{
+						try
+						{
+							projectItem.DTE.ExecuteCommand("Edit.SortUsings");
+						}
+						catch { }
+					}
 				}
+
 
 
 				foreach (var systemUsing in usings)
