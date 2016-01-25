@@ -1,0 +1,55 @@
+﻿// <copyright file="ComparisonEditorModule.cs" company="Facton GmbH">
+// All rights are reserved. Reproduction or transmission in whole or in part, in
+// any form or by any means, electronic, mechanical or otherwise, is prohibited
+// without the prior written consent of the copyright owner.
+// </copyright>
+
+namespace Facton.UI.Wpf.Domain.Comparison
+{
+	using Facton.Domain.Comparison;
+	using Facton.Infrastructure.Core;
+	using Facton.Infrastructure.Modularity;
+	using Facton.Infrastructure.Settings.Localizations;
+	using Facton.UI.Core.DisplayMetadata.Presentation;
+	using Facton.UI.Core.DisplayMetadata.ViewMetadata;
+	using Facton.UI.Core.Metadata.DisplayMetadata;
+	using Facton.UI.Core.Metadata.UIProperties;
+	using Facton.UI.Core.PresentationModel.DisplayMetadata;
+	using Facton.UI.Wpf.Core.Workspace;
+	using Facton.UI.Wpf.Domain.Comparison.Models;
+	using Facton.UI.Wpf.Domain.Comparison.ViewMetadata;
+	using Facton.UI.Wpf.Views.StructuralComparisonView.Builders;
+	using Facton.UI.Wpf.Views.StructuralComparisonView.Presentation;
+
+	/// <summary>
+	/// Straightforward comparison editor module implementation.
+	/// </summary>
+	public class ComparisonEditorModule : IModule
+	{
+		/// <inheritdoc />
+		public void Initialize(ITypeRegistry typeRegistry)
+		{
+			var structuralComparisonService = typeRegistry.GetObject<IStructuralComparisonService>();
+			var workspaceViewService = typeRegistry.GetObject<IWorkspaceViewService>();
+			var structuralComparisonViewBuilderFactory = typeRegistry.GetObject<IStructuralComparisonViewBuilderFactory>();
+			var comparisonEditor = new ComparisonEditor(structuralComparisonService, workspaceViewService, structuralComparisonViewBuilderFactory);
+			typeRegistry.RegisterInstance<IComparisonEditor>(comparisonEditor);
+
+			var valueModelFactoryRegistry = typeRegistry.GetObject<IInternalPropertyValueModelFactoryRegistry>();
+			var uiPropertyRegistry = typeRegistry.GetObject<IUIPropertyRegistry>();
+			valueModelFactoryRegistry.RegisterCustomModelFactory(
+				p => p is IComparisonPresentationModel, new ComparisonValueModelFactory(uiPropertyRegistry));
+
+			var tableViewMetadataService = typeRegistry.GetObject<ITableViewMetadataService>();
+			var presentationElementService = typeRegistry.GetObject<IPresentationElementService>();
+			var propertyValuePairDescriptorService = typeRegistry.GetObject<IPropertyValuePairDescriptorService>();
+			var commonLocalizationProvider = typeRegistry.GetObject<ICommonLocalizationProvider>();
+
+			var comparisonDetailViewMetadataProvider = new ComparisonDetailViewMetadataProvider(
+				presentationElementService,
+				propertyValuePairDescriptorService,
+				commonLocalizationProvider);
+			tableViewMetadataService.RegisterMetadataProvider(comparisonDetailViewMetadataProvider, priority: 3);
+		}
+	}
+}

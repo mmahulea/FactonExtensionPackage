@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<moduleConfiguration type="Facton.UI.Wpf.Domain.Comparison.ComparisonEditorModule, Facton.UI.Wpf.Domain.Comparison.Implementation"
+										 xmlns="http://www.facton.com/infrastructure/modularity">
+	
+	<requiredService name="Facton.Domain.Comparison.IStructuralComparisonService" requirementType="runtimeOnly"/>
+	<requiredService name="Facton.Infrastructure.Settings.Localizations.ICommonLocalizationProvider"/>
+	<requiredService name="Facton.UI.Core.Metadata.UIProperties.IUIPropertyRegistry"/>
+	<requiredService name="Facton.UI.Core.DisplayMetadata.Presentation.IPresentationElementService"/>
+	<requiredService name="Facton.UI.Core.DisplayMetadata.ViewMetadata.ITableViewMetadataService"/>
+	<requiredService name="Facton.UI.Core.Metadata.DisplayMetadata.IPropertyValuePairDescriptorService"/>
+	<requiredService name="Facton.UI.Wpf.Core.Workspace.IWorkspaceViewService"/>
+	<requiredService name="Facton.UI.Wpf.Views.StructuralComparisonView.Builders.IStructuralComparisonViewBuilderFactory"/>	
+	<requiredService name="Facton.UI.Wpf.Views.StructuralComparisonView.Builders.IStructuralComparisonBuilderFactory"/>	
+	
+	<dependingService name="Facton.UI.Core.PresentationModel.DisplayMetadata.IInternalPropertyValueModelFactoryRegistry"/>	
+	
+	<providedService name="Facton.UI.Wpf.Domain.Comparison.IComparisonEditor"/>
+	
+</moduleConfiguration>

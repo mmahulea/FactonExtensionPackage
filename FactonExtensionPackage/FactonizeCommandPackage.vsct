@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<Extern href="stdidcmd.h" />
+
+	<Extern href="vsshlids.h" />
+
+	<Commands package="guidFactonizeCommandPackage">
+		<Groups>
+			<Group guid="guidFactonizeCommandPackageCmdSet" id="MyMenuGroup" priority="0x0001">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
+			</Group>
+			<Group guid="guidFactonizeCommandPackageCmdSet7" id="MyMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+			</Group>
+			<!--<Group guid="guidFactonizeCommandPackageCmdSet8" id="MyMenuGroup" priority="0x0001">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+			</Group>-->
+			<Group guid="guidFactonizeCommandPackageCmdSet8" id="MyMenuGroup" priority="0x0001">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE" />
+			</Group>
+			<Group guid="guidTopLevelMenuCmdSet" id="SubMenuGroup" priority="0x0002">
+				<Parent guid="guidTopLevelMenuCmdSet" id="SubMenu" />
+			</Group>
+			<Group guid="MenuCmdSet" id="SubMenuGroup2" priority="0x0002">
+				<Parent guid="MenuCmdSet" id="SubMenu2" />
+			</Group>
+
+			<!-- Delete bin folders-->
+			<Group guid="deleteBinProjectNodeCmdSet" id="MyMenuGroup" priority="0x0002">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+			</Group>
+			<!--<Group guid="deleteBinFolderNodeCmdSet" id="MyMenuGroup" priority="0x0002">
+				<Parent guid="guidSHLMainMenu" id="cmdidViewNextTab" />
+			</Group>-->
+
+			<Group guid="guidFactonizeCommandPackageCmdSet10" id="MyMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE" />
+			</Group>
+			<Group guid="guidFactonizeCommandPackageCmdSet11" id="MyMenuGroup" priority="0x0001">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE" />
+			</Group>
+			<Group guid="guidFactonizeCommandPackageCmdSet12" id="MyMenuGroup" priority="0x0002">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNFOLDER" />
+			</Group>
+			<Group guid="guidFactonizeCommandPackageCmdSet13" id="MyMenuGroup" priority="0x0001">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+			</Group>
+			<Group guid="guidFactonizeCommandPackageCmdSet14" id="MyMenuGroup" priority="0x0001">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNFOLDER" />
+			</Group>
+			<Group guid="guidFactonizeCommandPackageCmdSet15" id="MyMenuGroup" priority="0x0001">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+			</Group>
+		  <Group guid="guidFactonizeCommandPackageCmdSet16" id="MyMenuGroup" priority="0x0001">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNFOLDER" />
+      </Group>
+      <Group guid="guidFactonizeCommandPackageCmdSet17" id="MyMenuGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
+    </Groups>
+
+		<Menus>
+			<Menu guid="guidTopLevelMenuCmdSet" id="SubMenu" priority="0x9100" type="Menu">
+				<Parent guid="guidFactonizeCommandPackageCmdSet" id="MyMenuGroup" />
+				<Strings>
+					<ButtonText>Sub Menu</ButtonText>
+					<CommandName>Sub Menu</CommandName>
+				</Strings>
+			</Menu>
+
+			<Menu guid="MenuCmdSet" id="SubMenu2" priority="0x9100" type="Menu">
+				<Parent guid="guidFactonizeCommandPackageCmdSet8" id="MyMenuGroup" />
+				<Strings>
+					<ButtonText>Sub Menu</ButtonText>
+					<CommandName>Sub Menu</CommandName>
+				</Strings>
+			</Menu>
+		</Menus>
+
+		<Buttons>
+			<Button guid="guidFactonizeCommandPackageCmdSet" id="FactonizeCommandId" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+				<Strings>
+					<ButtonText>FACTONize everything!</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet2" id="cmdidGoToModuleCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet" id="MyMenuGroup" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Go to module</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet3" id="cmdidGoToConfigCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet" id="MyMenuGroup" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Go to config</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet4" id="cmdidGoToProvidedConfigCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet" id="MyMenuGroup" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Go to provided config</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet" id="cmdidModuleToolWindowCommand" priority="0x0100" type="Button">
+				<Parent guid="guidSHLMainMenu" id="IDG_VS_WNDO_OTRWNDWS1" />
+				<Strings>
+					<ButtonText>ModuleToolWindow</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet6" id="cmdidFactonizeCtorsCommand" priority="0x0100" type="Button">
+				<Parent guid="guidTopLevelMenuCmdSet" id="SubMenuGroup" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Factonize Constructors</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet7" id="cmdidAddInheritDocCommand" priority="0x0200" type="Button">
+				<Parent guid="guidTopLevelMenuCmdSet" id="SubMenuGroup" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Add inheritdoc statements</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet7" id="cmdidInheritDocInSolutionExplorerCommand" priority="0x0100" type="Button">
+				<Parent guid="MenuCmdSet" id="SubMenuGroup2" />
+				<Strings>
+					<ButtonText>Add inheritdoc statements</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet8" id="cmdidFactonizeInSolutionExplorerCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet8" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+				<Strings>
+					<ButtonText>FACTONize pending changes!</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet9" id="cmdidFactonizeCtorsInSolutionExplorerCommand" priority="0x0100" type="Button">
+				<Parent guid="MenuCmdSet" id="SubMenuGroup2" />
+				<Strings>
+					<ButtonText>Factonize Constructors</ButtonText>
+				</Strings>
+			</Button>
+			<!--Delete bin folder buttons-->
+			<Button guid="deleteBinProjectNodeCmdSet" id="cmdidDeleteBinFolderCommand" priority="0x0100" type="Button">
+				<Parent guid="deleteBinProjectNodeCmdSet" id="MyMenuGroup" />
+				<Strings>
+					<ButtonText>Delete bin folder</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet10" id="cmdidBuildFacton7DebugCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet10" id="MyMenuGroup" />
+				<Icon guid="guidImages1" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Build-Facton7-Debug.cmd</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet11" id="cmdidGetBuildFacton7DebugCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet10" id="MyMenuGroup" />
+				<Icon guid="guidImages2" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Get-Build-Facton7-Debug.cmd</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet12" id="cmdidSolutionFolderDeleteBinFoldersCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet12" id="MyMenuGroup" />
+				<Icon guid="guidImages3" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Delete bin folder</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet13" id="cmdidFactonizeEverythingInProjectCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet13" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+				<Strings>
+					<ButtonText>FACTONize everything!</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet14" id="cmdidFactonizeEverythingInSolutionFolderCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet14" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+				<Strings>
+					<ButtonText>FACTONize everything!</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidFactonizeCommandPackageCmdSet15" id="cmdidFactonizePendingChangesInProjectCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet15" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+				<Strings>
+					<ButtonText>FACTONize pending changes!</ButtonText>
+				</Strings>
+			</Button>
+		  <Button guid="guidFactonizeCommandPackageCmdSet16" id="cmdidFactonizePendingChangesInFolderSolutionCommand" priority="0x0100" type="Button">
+        <Parent guid="guidFactonizeCommandPackageCmdSet16" id="MyMenuGroup" />
+				<Icon guid="guidImages" id="bmpPic1" />
+        <Strings>
+          <ButtonText>FACTONize pending changes!</ButtonText>
+        </Strings>
+      </Button>
+      <!--<Button guid="guidFactonizeCommandPackageCmdSet17" id="cmdidUpdateModuleConfigFileCommand" priority="0x0100" type="Button">
+				<Parent guid="guidFactonizeCommandPackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages8" id="bmpPic1" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Update config</ButtonText>
+        </Strings>
+      </Button>-->
+    </Buttons>
+
+		<Bitmaps>
+			<Bitmap guid="guidImages" href="Resources\Facton.png" />					  			      
+    </Bitmaps>
+	</Commands>
+
+	<Symbols>
+		<!-- This is the package guid. -->
+		<GuidSymbol name="guidFactonizeCommandPackage" value="{5ef15350-76b6-4c9d-a1da-30c19ebadb66}" />
+
+		<GuidSymbol value="{c9321ebf-d413-4d66-99c4-59cea4a010f7}" name="guidTopLevelMenuCmdSet">
+			<IDSymbol name="SubMenu" value="0x1100" />
+			<IDSymbol name="SubMenuGroup" value="0x1150" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{c9321ebf-d413-4d66-99c4-59cea4a010f8}" name="MenuCmdSet">
+			<IDSymbol name="SubMenu2" value="0x1100" />
+			<IDSymbol name="SubMenuGroup2" value="0x1150" />
+		</GuidSymbol>
+
+		<!-- This is the guid used to group the menu commands together -->
+		<GuidSymbol value="{c9321ebf-d413-4d66-99c4-59cea4a010f1}" name="guidFactonCommandsPackageCmdSet">
+			<IDSymbol value="0x1020" name="FactonCommandsId" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidFactonizeCommandPackageCmdSet" value="{4986d6bb-e9d5-426c-aeea-22c34057aa21}">
+			<IDSymbol name="MyMenuGroup" value="0x1020" />
+			<IDSymbol name="FactonizeCommandId" value="0x0100" />
+			<IDSymbol value="4129" name="cmdidModuleToolWindowCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidImages" value="{11d1fd89-5bc2-49f4-8c9f-398dc75026db}">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{c9321ebf-d413-4d66-99c4-59cea4a010f4}" name="guidFactonizeCommandPackageCmdSet2">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidGoToModuleCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{30711e6c-3e6b-4033-82f2-31c356d88968}" name="guidFactonizeCommandPackageCmdSet3">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidGoToConfigCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{31896876-0e72-4bc6-8547-d797e20f19b8}" name="guidFactonizeCommandPackageCmdSet4">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidGoToProvidedConfigCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{6abe100b-97b4-4737-8778-69419bb159aa}" name="guidFactonizeCommandPackageCmdSet1">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidTestCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{d65355bb-ef74-4b89-bfb7-6b6539593652}" name="guidFactonizeCommandPackageCmdSet5">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidFindNotRequiredModulesCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{12e3c432-79da-43b0-9210-a7dab48db188}" name="guidFactonizeCommandPackageCmdSet6">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidFactonizeCtorsCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{fb2bf056-14a9-463a-a1f7-add539d25c73}" name="guidFactonizeCommandPackageCmdSet7">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidAddInheritDocCommand" />
+			<IDSymbol value="4129" name="cmdidInheritDocInSolutionExplorerCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{8535b993-9f6f-4a8a-b8c0-a5f4b45bfdad}" name="guidFactonizeCommandPackageCmdSet8">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidFactonizeInSolutionExplorerCommand" />
+		</GuidSymbol>
+		<GuidSymbol value="{4cdce755-cb5b-4449-b80b-67ee689d7fdd}" name="guidFactonizeCommandPackageCmdSet9">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidFactonizeCtorsInSolutionExplorerCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{c79ec208-9741-471f-a093-08ccc52c1e7b}" name="deleteBinProjectNodeCmdSet">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidDeleteBinFolderCommand" />
+		</GuidSymbol>
+
+
+		<GuidSymbol value="{498f8d3a-f294-4c2a-8341-2dd8aa2ff6e6}" name="guidFactonizeCommandPackageCmdSet10">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidBuildFacton7DebugCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{1b0c62cd-5cdb-481c-812b-0da2792427d0}" name="guidImages1">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{f2eb0f74-0a5d-4299-90b8-981f9ba1bc3f}" name="guidFactonizeCommandPackageCmdSet11">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidGetBuildFacton7DebugCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{d221737c-b177-454f-b2b6-1efc3ae98769}" name="guidImages2">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{3046e72d-17b0-4976-9029-07e917846149}" name="guidFactonizeCommandPackageCmdSet12">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidSolutionFolderDeleteBinFoldersCommand" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{d14b28db-0936-44a5-bb17-3b7e1fe659b3}" name="guidImages3">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+	
+		<GuidSymbol value="{c86370ff-1e84-4acc-a36e-a6fc52a52247}" name="guidFactonizeCommandPackageCmdSet13">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidFactonizeEverythingInProjectCommand" />
+		</GuidSymbol>
+	
+		<GuidSymbol value="{1b1dd3fc-34ff-415e-b6ed-9986dabc5715}" name="guidImages4">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+	
+		<GuidSymbol value="{aec2b311-1ac5-43c6-a41c-b1d5eeac9cfb}" name="guidFactonizeCommandPackageCmdSet14">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidFactonizeEverythingInSolutionFolderCommand" />
+		</GuidSymbol>
+	
+		<GuidSymbol value="{241f63d5-a30f-4bd7-a467-82422a054d88}" name="guidImages5">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+	
+		<GuidSymbol value="{b6d6b651-74f2-415a-ad6d-a8ffefb0dc5c}" name="guidFactonizeCommandPackageCmdSet15">
+			<IDSymbol value="4128" name="MyMenuGroup" />
+			<IDSymbol value="256" name="cmdidFactonizePendingChangesInProjectCommand" />
+		</GuidSymbol>
+	
+		<GuidSymbol value="{2aa94dc4-4692-4141-8675-7e6f0080da3d}" name="guidImages6">
+			<IDSymbol name="bmpPic1" value="1" />
+			<IDSymbol name="bmpPic2" value="2" />
+			<IDSymbol name="bmpPicSearch" value="3" />
+			<IDSymbol name="bmpPicX" value="4" />
+			<IDSymbol name="bmpPicArrows" value="5" />
+			<IDSymbol name="bmpPicStrikethrough" value="6" />
+		</GuidSymbol>
+	
+    <GuidSymbol value="{bfeabf51-c647-4cc8-bcad-21b9ebf77fcd}" name="guidFactonizeCommandPackageCmdSet16">
+      <IDSymbol value="4128" name="MyMenuGroup" />
+      <IDSymbol value="256" name="cmdidFactonizePendingChangesInFolderSolutionCommand" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{c93d834f-3001-410c-9025-fd67ac9ee7f7}" name="guidImages7">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{c56c7a6d-d1a4-4f7a-a62e-841eb59fd89e}" name="guidFactonizeCommandPackageCmdSet17">
+      <IDSymbol value="4128" name="MyMenuGroup" />
+      <IDSymbol value="256" name="cmdidUpdateModuleConfigFileCommand" />
+    </GuidSymbol>
+  
+    <GuidSymbol value="{3d7985a5-2c78-472a-b8ea-5d2647c92d31}" name="guidImages8">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  </Symbols>
+	
+</CommandTable>
