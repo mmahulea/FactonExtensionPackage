@@ -113,13 +113,13 @@
 					<ButtonText>ModuleToolWindow</ButtonText>
 				</Strings>
 			</Button>
-			<Button guid="guidFactonizeCommandPackageCmdSet6" id="cmdidFactonizeCtorsCommand" priority="0x0100" type="Button">
+			<!--<Button guid="guidFactonizeCommandPackageCmdSet6" id="cmdidFactonizeCtorsCommand" priority="0x0100" type="Button">
 				<Parent guid="guidTopLevelMenuCmdSet" id="SubMenuGroup" />
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
 					<ButtonText>Factonize Constructors</ButtonText>
 				</Strings>
-			</Button>
+			</Button>-->
 			<Button guid="guidFactonizeCommandPackageCmdSet7" id="cmdidAddInheritDocCommand" priority="0x0200" type="Button">
 				<Parent guid="guidTopLevelMenuCmdSet" id="SubMenuGroup" />
 				<CommandFlag>DynamicVisibility</CommandFlag>

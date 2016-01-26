@@ -139,7 +139,7 @@
 			codeFunction.DocComment = sb.ToString();
 		}
 
-		private static void AddDocCommentToCtor(CodeFunction codeFunction)
+		public static void AddDocCommentToCtor(CodeFunction codeFunction)
 		{
 			AddGhostDogCommand(codeFunction as CodeElement);
 			var docComment = codeFunction.DocComment;
@@ -153,34 +153,6 @@
 				docComment = docComment.Replace(substring, replaceText);
 				codeFunction.DocComment = docComment;
 			}
-			//else
-			//{
-			//	text = @"<exception cref=""ArgumentNullException";
-			//	if (docComment.Contains(text))
-			//	{
-			//		string replaceText = usingSystemFound ? exceptionMessage2 : exceptionMessage1;
-			//		var index1 = docComment.IndexOf(text);
-			//		var index2 = docComment.IndexOf("</exception>") + 12;
-			//		var substring = docComment.Substring(index1, index2 - index1);
-			//		docComment = docComment.Replace(substring, replaceText);
-			//	}
-			//}
-
-			//var sb = new StringBuilder();
-			//sb.AppendLine("<DOC>");
-			//sb.AppendLine("<summary>");
-			//sb.AppendLine($"Initializes a new instance of the <see cref=\"{codeFunction.Name}\"/> class.");
-			//sb.AppendLine("</summary>");
-			//if (codeFunction.Parameters.Count > 0)
-			//{
-			//	foreach (CodeElement parameter in codeFunction.Parameters)
-			//	{
-			//		sb.AppendLine($"<param name= \"{parameter.Name}\">The {parameter.Name.CamelCaseSplit()}.</param>");
-			//	}
-			//}
-			//sb.AppendLine("</DOC>");
-
-			//codeFunction.DocComment = sb.ToString();
 		}
 
 		private static void AddDocCommentToProperty(CodeProperty codeProperty)

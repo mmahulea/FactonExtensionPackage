@@ -66,6 +66,10 @@
 
 		public static string ToDocComment(this string intput)
 		{
+			if (string.IsNullOrWhiteSpace(intput))
+			{
+				return "<DOC></DOC>";
+			}
 			return string.Format(Summary, intput);
 		}
 

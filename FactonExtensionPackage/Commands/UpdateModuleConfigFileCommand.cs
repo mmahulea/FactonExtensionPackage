@@ -19,11 +19,6 @@
 
 		private UpdateModuleConfigFileCommand(Package package)
 		{
-			if (package == null)
-			{
-				throw new ArgumentNullException("package");
-			}
-
 			this.package = package;
 
 			var commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -54,13 +49,7 @@
 			private set;
 		}
 
-		private IServiceProvider ServiceProvider
-		{
-			get
-			{
-				return this.package;
-			}
-		}
+		private IServiceProvider ServiceProvider => this.package;
 
 		public static void Initialize(Package package)
 		{

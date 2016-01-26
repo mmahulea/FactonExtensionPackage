@@ -15,11 +15,6 @@
 
 		private FactonizeCommand(Package package)
 		{
-			if (package == null)
-			{
-				throw new ArgumentNullException(nameof(package));
-			}
-
 			this.package = package;
 
 			var commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;

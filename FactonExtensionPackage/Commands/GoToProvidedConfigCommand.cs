@@ -19,11 +19,6 @@
 
 		private GoToProvidedConfigCommand(Package package)
 		{
-			if (package == null)
-			{
-				throw new ArgumentNullException(nameof(package));
-			}
-
 			this.package = package;
 
 			var commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -42,13 +37,7 @@
 			private set;
 		}
 
-		private IServiceProvider ServiceProvider
-		{
-			get
-			{
-				return this.package;
-			}
-		}
+		private IServiceProvider ServiceProvider => this.package;
 
 		public static void Initialize(Package package)
 		{

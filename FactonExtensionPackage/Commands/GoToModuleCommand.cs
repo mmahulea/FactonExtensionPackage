@@ -4,7 +4,6 @@
 	using System.ComponentModel.Design;
 	using EnvDTE;
 	using FactonExtensionPackage.Extensions;
-	using FactonExtensionPackage.Modularity;
 	using FactonExtensionPackage.Services;
 	using Microsoft.VisualStudio.Shell;
 	using Microsoft.VisualStudio.Shell.Interop;
@@ -28,8 +27,7 @@
 
 			this.package = package;
 
-			OleMenuCommandService commandService =
-				this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+			var commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
 			if (commandService != null)
 			{
 				var menuCommandId = new CommandID(CommandSet, CommandId);
@@ -60,27 +58,6 @@
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
 			var projectItem = SearchService.FindModuleFromConfig(dte.ActiveDocument.ProjectItem);
 			projectItem?.OpenInEditor();
-			//var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-
-			//if (this.moduleConfig == null)
-			//{
-			//	var configFileName = dte.GetConfigFileNameFromCurrentLine();
-			//	if (!string.IsNullOrWhiteSpace(configFileName))
-			//	{
-			//		var projectItem = dte.Solution.FindProjectItem(p => p.Name == configFileName);
-			//		if (projectItem != null)
-			//		{
-			//			this.moduleConfig = projectItem.Deserialize<XmlModuleConfig>();
-			//		}
-			//	}
-			//}
-
-			//if (this.moduleConfig != null)
-			//{
-			//	var project = dte.Solution.FindProject(p => p.Name == this.moduleConfig.AssemblyName);
-			//	var projectItem = project.FindProjectItem(p => p.Name == this.moduleConfig.CsFileName);
-			//	projectItem?.OpenInEditor();
-			//}
 		}
 	}
 }

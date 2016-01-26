@@ -5,6 +5,7 @@
 	using EnvDTE;
 	using EnvDTE80;
 	using FactonExtensionPackage.Extensions;
+	using FactonExtensionPackage.FormatingCommands;
 	using FactonExtensionPackage.FormatingCommands.SubCommands;
 	using Microsoft.VisualStudio.Shell;
 	using Microsoft.VisualStudio.Shell.Interop;
@@ -28,17 +29,12 @@
 				//{
 				//	// ignored
 				//}
-				Execute(dte.ActiveDocument.ProjectItem);
-				//AddArgumentNullChecksToContructors.DetermineNewConfig(dte);
-				//dte.ExecuteCommand("Edit.FormatDocument");
+				Execute(dte.ActiveDocument.ProjectItem);				
 				try
 				{
 					txtSel.MoveTo(line, column);
 				}
-				catch
-				{
-					// ignored
-				}
+				catch { }
 			}
 			finally
 			{
@@ -96,19 +92,6 @@
 				|| (projectItem.Name.EndsWith(".config", StringComparison.CurrentCulture)))
 			{
 				bool opened = projectItem.TryOpen();
-				try
-				{
-					
-					var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-					dte.ExecuteCommand("Edit.RemoveUsings");
-					dte.ExecuteCommand("ProjectandSolutionContextMenus.Project.PowerCommands.RemoveandSortUsings");
-					dte.ExecuteCommand("ReSharper_SilentCleanupCode");
-				}
-				catch (Exception ex)
-				{
-					// ignored
-				}
-			
 				InternalExecute(projectItem);
 				projectItem.TryClose(opened);
 			}
@@ -127,6 +110,7 @@
 			if (projectItem.Name.EndsWith(".cs", StringComparison.CurrentCulture))
 			{
 				AddCopyrightCommand.Execute(projectItem);
+				AddArgumentNullChecksToContructors.InternalExecute(projectItem);
 				FormatUsingStatements.Execute(projectItem);
 				FactonizeCurrentProjectCommand.Execute(projectItem);
 				FormalLineOneByOneCommand.Execute(projectItem);
@@ -139,6 +123,16 @@
 			if (projectItem.Name.EndsWith(".config", StringComparison.CurrentCulture))
 			{
 				FactonizeModuleCommand.Execute(projectItem);
+			}
+
+			if (!projectItem.ContainingProject.IsTestProject())
+			{
+				var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+				try
+				{
+					dte.ExecuteCommand("Edit.FormatDocument");
+				}
+				catch { }
 			}
 		}
 	}

@@ -134,10 +134,8 @@
 			GoToModuleCommand.Initialize(this);
 			GoToConfigCommand.Initialize(this);
 			GoToProvidedConfigCommand.Initialize(this);
-			TestCommand.Initialize(this);
 			this.dte = (DTE)this.GetService(typeof(DTE));
 			this.AdviseSolutionEvents();
-			FindNotRequiredModulesCommand.Initialize(this);
 			ModuleToolWindowCommand.Initialize(this);
 			Commands.FactonizeCtorsCommand.Initialize(this);
 			Commands.AddInheritDocCommand.Initialize(this);

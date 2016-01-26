@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.ComponentModel.Design;
-	using System.Linq;
 	using EnvDTE;
 	using FactonExtensionPackage.Extensions;
 	using FactonExtensionPackage.Services;
@@ -27,7 +26,6 @@
 				var menuCommandId = new CommandID(CommandSet, CommandId);
 				var menuCommand = new OleMenuCommand(MenuItemCallback, menuCommandId);
 				commandService.AddCommand(menuCommand);
-
 				menuCommand.BeforeQueryStatus += MenuItemBeforeQueryStatus;
 			}
 		}
@@ -52,25 +50,6 @@
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
 			var projectItem = SearchService.FindConfigFromModule(dte.ActiveDocument.ProjectItem);
 			projectItem?.OpenInEditor();
-			//ProjectItem projectItem = null;
-			//var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-
-			//var codeClass = dte.FindCodeElemet<CodeClass>();
-			//if (codeClass != null)
-			//{
-			//	string type = $"type=\"{codeClass.FullName}, {dte.ActiveDocument.ProjectItem.ContainingProject.Name}\"";
-			//	projectItem = dte.Solution.FindProjectItem(p => p.Name.EndsWith(".config") && p.ReadAllText().Contains(type));
-			//}
-			//else
-			//{
-			//	var configFileName = dte.GetConfigFileNameFromCurrentLine();
-			//	if (!string.IsNullOrWhiteSpace(configFileName))
-			//	{
-			//		projectItem = dte.Solution.FindProjectItem(p => p.Name == configFileName);
-			//	}
-			//}
-
-			//projectItem?.OpenInEditor();
 		}
 	}
 }
