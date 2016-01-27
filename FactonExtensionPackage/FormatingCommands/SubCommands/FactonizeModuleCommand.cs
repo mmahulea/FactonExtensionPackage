@@ -15,7 +15,7 @@
 		public static void Execute(ProjectItem projectItem)
 		{
 			if (projectItem.Name.EndsWith(".config", StringComparison.CurrentCulture) && projectItem.Contains("<moduleConfiguration") && !projectItem.ContainingProject.IsTestProject())
-			{			
+			{
 				var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
 				string configFile = projectItem.ReadAllText();
 
@@ -25,7 +25,6 @@
 					var project = dte.Solution.FindProject(p => p.Name == moduleConfig.AssemblyName);
 					var moduleProjectItem = project.FindProjectItem(p => p.Name == moduleConfig.CsFileName);
 
-				
 					string csFile = moduleProjectItem.ReadAllText();
 
 					string newConfig = DetermineNewConfig(configFile, csFile);
@@ -46,9 +45,9 @@
 			var services = (from Match match in new Regex(@".GetObject\<(?<element>[^\>]+)\>", RegexOptions).Matches(csFile)
 							select match.Groups[1].Value).ToList();
 			var runtimeServices = (from Match match in new Regex(@".GetRuntimeObject\<(?<element>[^\>]+)\>", RegexOptions).Matches(csFile)
-								   select match.Groups[1].Value).ToList();
+								   select match.Groups[1].Value);
 			var providedServices = (from Match match in new Regex(@".RegisterInstance\<(?<element>[^\>]+)\>", RegexOptions).Matches(csFile)
-									select match.Groups[1].Value).ToList();
+									select match.Groups[1].Value);
 
 			var stubServices = (from Match match in new Regex(@"ModuleStub\<(?<element>[^\>]+)\>", RegexOptions).Matches(csFile)
 								select match.Groups[1].Value).ToList();
@@ -82,49 +81,28 @@
 
 			var newText = newModuleConfig.Serialize();
 
-			bool requiredServiceAdded = false;
-			bool dependendServiceAdded = false;
-			bool providedServiceAdded = false;
-			var sb = new StringBuilder();
-			foreach (var line in newText.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+			var lines = newText.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(l => l.Trim()).Distinct().ToList();
+			var newString = new StringBuilder();
+			newString.Append($"<moduleConfiguration type=\"{moduleConfig.ImplementationType}\"" + Environment.NewLine);
+			newString.Append(@"                     xmlns=""http://www.facton.com/infrastructure/modularity"">" + Environment.NewLine + Environment.NewLine);
+
+			foreach (var line in lines.Where(l => l.StartsWith("<requiredService ", StringComparison.CurrentCulture)))
 			{
-				if (line.Trim().StartsWith("<moduleConfiguration ", StringComparison.CurrentCulture))
-				{
-					sb.Append($"<moduleConfiguration type=\"{moduleConfig.ImplementationType}\"");
-					sb.Append(Environment.NewLine);
-					sb.Append(@"                     xmlns=""http://www.facton.com/infrastructure/modularity"">");
-					sb.Append(Environment.NewLine);
-					continue;
-				}
-
-				if (line.TrimStart().StartsWith("<requiredService ", StringComparison.CurrentCulture) && !requiredServiceAdded)
-				{
-					requiredServiceAdded = true;
-					sb.Append(Environment.NewLine);
-				}
-
-				if (line.TrimStart().StartsWith("<dependingService ", StringComparison.CurrentCulture) && !dependendServiceAdded)
-				{
-					dependendServiceAdded = true;
-					sb.Append(Environment.NewLine);
-				}
-
-				if (line.TrimStart().StartsWith("<providedService ", StringComparison.CurrentCulture) && !providedServiceAdded)
-				{
-					providedServiceAdded = true;
-					sb.Append(Environment.NewLine);
-				}
-
-				if (line.Trim().Equals("</moduleConfiguration>"))
-				{
-					sb.Append(Environment.NewLine);
-				}
-
-				sb.Append(line);
-				sb.Append(Environment.NewLine);
+				newString.Append(line);
 			}
+			newString.Append(Environment.NewLine);
+			foreach (var line in lines.Where(l => l.StartsWith("<dependingService ", StringComparison.CurrentCulture)))
+			{
+				newString.Append(line);
+			}
+			newString.Append(Environment.NewLine);
+			foreach (var line in lines.Where(l => l.StartsWith("<providedService ", StringComparison.CurrentCulture)))
+			{
+				newString.Append(line);
+			}
+			newString.Append(Environment.NewLine + "</moduleConfiguration>");
 
-			string file = sb.ToString();
+			string file = newString.ToString();
 			file = file.Replace(" requirementType=\"normal\"", string.Empty).Replace(" />", "/>").Replace("?>", " ?>").Trim();
 			return file;
 		}
