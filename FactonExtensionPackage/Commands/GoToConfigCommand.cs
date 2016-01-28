@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.ComponentModel.Design;
+	using System.Linq;
 	using EnvDTE;
 	using FactonExtensionPackage.Extensions;
 	using FactonExtensionPackage.Services;
@@ -10,6 +11,8 @@
 
 	internal sealed class GoToConfigCommand
 	{
+		private string moduleName;
+
 		public const int CommandId = 256;
 
 		public static readonly Guid CommandSet = new Guid("30711e6c-3e6b-4033-82f2-31c356d88968");
@@ -24,9 +27,9 @@
 			if (commandService != null)
 			{
 				var menuCommandId = new CommandID(CommandSet, CommandId);
-				var menuCommand = new OleMenuCommand(MenuItemCallback, menuCommandId);
+				var menuCommand = new OleMenuCommand(this.MenuItemCallback, menuCommandId);
 				commandService.AddCommand(menuCommand);
-				menuCommand.BeforeQueryStatus += MenuItemBeforeQueryStatus;
+				menuCommand.BeforeQueryStatus += this.MenuItemBeforeQueryStatus;
 			}
 		}
 
@@ -39,17 +42,36 @@
 			Instance = new GoToConfigCommand(package);
 		}
 
-		private static void MenuItemBeforeQueryStatus(object sender, EventArgs e)
+		private void MenuItemBeforeQueryStatus(object sender, EventArgs e)
 		{
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-			((OleMenuCommand)sender).Visible = dte.ActiveDocument.ProjectItem.IsModuleClass();
+			bool visible = dte.ActiveDocument.ProjectItem.IsModuleClass();
+			if (!visible)
+			{
+				var lineText = dte.GetLineText();
+				this.moduleName = lineText.Matches(@"<module name=\""(?<element>[^\>]+)\""").FirstOrDefault();
+				visible = !string.IsNullOrWhiteSpace(this.moduleName);
+			}
+			((OleMenuCommand)sender).Visible = visible;
 		}
 
-		private static void MenuItemCallback(object sender, EventArgs e)
+		private void MenuItemCallback(object sender, EventArgs e)
 		{
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-			var projectItem = SearchService.FindConfigFromModule(dte.ActiveDocument.ProjectItem);
-			projectItem?.OpenInEditor();
+			ProjectItem condigProjectItem = null;
+			if (!string.IsNullOrWhiteSpace(this.moduleName))
+			{
+				condigProjectItem = dte.Solution.FindProjectItem(this.moduleName + ".config");
+			}
+			if (condigProjectItem != null)
+			{
+				condigProjectItem.OpenInEditor();
+			}
+			else
+			{
+				var projectItem = SearchService.FindConfigFromModule(dte.ActiveDocument.ProjectItem);
+				projectItem?.OpenInEditor();
+			}
 		}
 	}
 }

@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.ComponentModel.Design;
+	using System.Linq;
 	using EnvDTE;
 	using FactonExtensionPackage.Extensions;
 	using FactonExtensionPackage.Services;
@@ -10,6 +11,8 @@
 
 	internal sealed class GoToModuleCommand
 	{
+		private string moduleName;
+
 		public const int CommandId = 256;
 
 		public static readonly Guid CommandSet = new Guid("c9321ebf-d413-4d66-99c4-59cea4a010f4");
@@ -50,14 +53,34 @@
 		private void MenuItemBeforeQueryStatus(object sender, EventArgs e)
 		{
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-			this.menuCommand.Visible = dte.ActiveDocument.ProjectItem.IsModuleConfig();
+			bool visible = this.menuCommand.Visible = dte.ActiveDocument.ProjectItem.IsModuleConfig();
+			if (!visible)
+			{
+				var lineText = dte.GetLineText();
+				this.moduleName = lineText.Matches(@"<module name=\""(?<element>[^\>]+)\""").FirstOrDefault();
+				visible = !string.IsNullOrWhiteSpace(this.moduleName);
+			}
+			this.menuCommand.Visible = visible;
 		}
 
-		private static void MenuItemCallback(object sender, EventArgs e)
+		private void MenuItemCallback(object sender, EventArgs e)
 		{
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-			var projectItem = SearchService.FindModuleFromConfig(dte.ActiveDocument.ProjectItem);
-			projectItem?.OpenInEditor();
+
+			ProjectItem condigProjectItem = null;
+			if (!string.IsNullOrWhiteSpace(this.moduleName))
+			{
+				condigProjectItem = dte.Solution.FindProjectItem(this.moduleName + ".config");
+			}
+			if (condigProjectItem == null)
+			{
+				condigProjectItem = SearchService.FindModuleFromConfig(dte.ActiveDocument.ProjectItem);
+			}
+			if (condigProjectItem != null)
+			{
+				var projectItem = SearchService.FindModuleFromConfig(condigProjectItem);
+				projectItem?.OpenInEditor();
+			}
 		}
 	}
 }

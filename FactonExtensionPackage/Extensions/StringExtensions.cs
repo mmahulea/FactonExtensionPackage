@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Text;
 	using System.Text.RegularExpressions;
+	using static System.Char;
 
 	public static class Extensions
 	{
@@ -50,7 +51,7 @@
 			{
 				return string.Empty;
 			}
-			return char.ToUpper(input[0]) + input.Substring(1);
+			return ToUpper(input[0]) + input.Substring(1);
 		}
 
 		public static string CamelCaseSplit(this string input, string toRemove)
@@ -131,14 +132,14 @@
 
 		public static bool EqualsExcludingWhitespace(this string a, string b)
 		{
-			return a.Where(c => !Char.IsWhiteSpace(c))
-			   .SequenceEqual(b.Where(c => !Char.IsWhiteSpace(c)));
+			return a.Where(c => !IsWhiteSpace(c))
+			   .SequenceEqual(b.Where(c => !IsWhiteSpace(c)));
 		}
 
 		public static IEnumerable<string> Matches(this string txt, string regex)
 		{
-			return  from Match match in new Regex(regex, RegexOptions.Multiline | RegexOptions.Singleline).Matches(txt)
-					select match.Groups[1].Value;
+			return from Match match in new Regex(regex, RegexOptions.Multiline | RegexOptions.Singleline).Matches(txt)
+				   select match.Groups[1].Value;
 		}
 	}
 }
