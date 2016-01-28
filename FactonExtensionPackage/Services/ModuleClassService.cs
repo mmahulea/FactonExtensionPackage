@@ -1,10 +1,12 @@
 ﻿namespace FactonExtensionPackage.Services
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
-	using System.Windows;
+	using System.Text;
 	using EnvDTE;
 	using FactonExtensionPackage.Extensions;
+	using FactonExtensionPackage.Modularity;
 	using Microsoft.VisualStudio.Shell;
 	using Microsoft.VisualStudio.Shell.Interop;
 
@@ -12,8 +14,6 @@
 	{
 		public static bool VerifyConfiguration(ProjectItem projectItem)
 		{
-			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-
 			var configProjectItem = SearchService.FindConfigFromModule(projectItem);
 			if (configProjectItem == null)
 			{
@@ -27,24 +27,163 @@
 					.Union(moduleText.Matches(@".GetRuntimeObject\<(?<element>[^\>]+)\>"))
 					.Union(moduleText.Matches(@".RegisterInstance\<(?<element>[^\>]+)\>"));
 
-
 			foreach (var serviceName in serviceNames)
 			{
-				var interfaceProjectItem = dte.Solution.FindProjectItem(serviceName + ".cs");
-				if (interfaceProjectItem == null)
-				{
-					throw new Exception($"Service {serviceName} not found in solution.");
-				}
-				var nameSpace = SearchService.FindNameSpace(interfaceProjectItem);
-				var fullName = nameSpace.Name + "." + serviceName;
+				var fullName = FindServiceFullName(serviceName);
 
 				if (!configText.Contains(fullName))
 				{
-					throw new Exception($"{fullName} mot found in the configuration file. Model: {projectItem.Name}");
+					throw new Exception($"{fullName} not found in the configuration file. Model: {projectItem.Name}");
 				}
 			}
 
 			return false;
+		}
+
+		public static string GenerateConfig(ProjectItem projectItem)
+		{
+			string fileTxt = projectItem.ReadAllText();
+
+			var requiredServices = GetReguiredServices(fileTxt);
+			var dependingServices = GetDependingServices(fileTxt);
+			var providedServices = GetProvidedServices(fileTxt);
+			string classType = GetClassType(projectItem);
+
+			requiredServices = requiredServices.Where(s => dependingServices.All(d => d.ServiceName != s.ServiceName)).ToList();
+
+			return GenerateConfigFileText(classType, requiredServices, dependingServices, providedServices);
+		}
+
+		private static List<IRequiredService> GetReguiredServices(string fileTxt)
+		{
+			var requiredServices = new List<IRequiredService>();
+
+			var services = fileTxt.Matches(@".GetObject\<(?<element>[^\>]+)\>").Distinct();
+			var runtimeServices = fileTxt.Matches(@".GetRuntimeObject\<(?<element>[^\>]+)\>").Distinct();
+
+			foreach (var service in services)
+			{
+				var fullName = FindServiceFullName(service);
+				requiredServices.Add(new XmlRequiredService { ServiceName = fullName, RequirementType = XmlRequirementType.Normal });
+			}
+
+			foreach (var service in runtimeServices)
+			{
+				var fullName = FindServiceFullName(service);
+				requiredServices.Add(new XmlRequiredService { ServiceName = fullName, RequirementType = XmlRequirementType.RuntimeOnly });
+			}
+
+			return requiredServices;
+		}
+
+		private static List<IDependingService> GetDependingServices(string fileTxt)
+		{
+			var dependingServices = new List<IDependingService>();
+
+			var services = fileTxt.Matches(@".GetObject\<(?<element>[^\>]+)\>").Distinct();
+			foreach (var service in services)
+			{
+				if (service.EndsWith("Registry"))
+				{
+					var fullName = FindServiceFullName(service);
+					dependingServices.Add(new XmlDependingService { ServiceName = fullName });
+				}
+			}
+
+			return dependingServices;
+		}
+
+		private static List<IProvidedService> GetProvidedServices(string fileTxt)
+		{
+			var providedServices = new List<IProvidedService>();
+
+			var registeredServices = fileTxt.Matches(@".RegisterInstance\<(?<element>[^\>]+)\>").Distinct();
+			foreach (var registeredService in registeredServices)
+			{
+				var fullName = FindServiceFullName(registeredService);
+				providedServices.Add(new XmlProvidedService { ServiceName = fullName });
+
+			}
+			return providedServices;
+		}
+
+		public static string GenerateConfigFileText(
+			string classType,
+			List<IRequiredService> requiredServices,
+			List<IDependingService> dependingServices,
+			List<IProvidedService> providedServices)
+		{
+			var stringBuilder = new StringBuilder();
+			stringBuilder.AppendLine(@"<?xml version=""1.0"" encoding=""utf - 8"" ?>");
+			stringBuilder.AppendLine($"<moduleConfiguration type=\"{classType}\"");
+			stringBuilder.AppendLine(@"                     xmlns=""http://www.facton.com/infrastructure/modularity"">" + Environment.NewLine);
+
+			foreach (var service in requiredServices.OrderBy(s => s.ServiceName))
+			{
+				if (service.RequirementType == RequirementType.Normal)
+				{
+					stringBuilder.AppendLine($"<requiredService name=\"{service.ServiceName}\"/>");
+				}
+				else
+				{
+					stringBuilder.AppendLine($"<requiredService name=\"{service.ServiceName}\" requirementType=\"runtimeOnly\"/>");
+				}
+			}
+			if (requiredServices.Any()) stringBuilder.AppendLine();
+
+			foreach (var service in dependingServices.OrderBy(s => s.ServiceName))
+			{
+				stringBuilder.AppendLine($"<dependingService name=\"{service.ServiceName}\"/>");
+			}
+			if (dependingServices.Any()) stringBuilder.AppendLine();
+
+			foreach (var service in providedServices.OrderBy(s => s.ServiceName))
+			{
+				stringBuilder.AppendLine($"<providedService name=\"{service.ServiceName}\"/>");
+			}
+			if (providedServices.Any()) stringBuilder.AppendLine();
+
+			stringBuilder.Append("</moduleConfiguration>");
+
+			var file = stringBuilder.ToString();
+			file = file.Replace(" requirementType=\"normal\"", string.Empty).Replace(" />", "/>").Replace("?>", " ?>").Trim();
+			return file;
+		}
+
+		private static string GetClassType(ProjectItem projectItem)
+		{
+			var name = projectItem.Name.Remove(".cs");
+			var nameSpaceName = SearchService.FindNameSpace(projectItem).Name;
+			var projectName = projectItem.ContainingProject.Name;
+
+			return $"{nameSpaceName}.{name}, {projectName}";
+		}
+
+		private static string FindServiceFullName(string serviceName)
+		{
+			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
+			var interfaceName = serviceName.Split('.').Last();
+
+			var interfaceProjectItem = dte.Solution.FindProjectItem(interfaceName + ".cs");
+
+			if (interfaceProjectItem == null)
+			{
+				throw new Exception($"Service {serviceName} not found in solution.");
+			}
+			var nameSpace = SearchService.FindNameSpace(interfaceProjectItem);
+			var fullName = nameSpace.Name + "." + interfaceName;
+
+			if (!fullName.EndsWith(serviceName))
+			{
+				throw new Exception($"Service {serviceName} not found in solution.");
+			}
+
+			return fullName;
+		}
+
+		public static bool CompareTwoConfigFiles(string file1, string file2)
+		{
+			return file1.CompareAsConfigFile(file2) && file2.CompareAsConfigFile(file1);
 		}
 	}
 }

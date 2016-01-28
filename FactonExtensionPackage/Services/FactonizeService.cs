@@ -29,7 +29,7 @@
 				//{
 				//	// ignored
 				//}
-				Execute(dte.ActiveDocument.ProjectItem);				
+				Execute(dte.ActiveDocument.ProjectItem);
 				try
 				{
 					txtSel.MoveTo(line, column);
@@ -125,7 +125,7 @@
 				FactonizeModuleCommand.Execute(projectItem);
 			}
 
-			if (!projectItem.ContainingProject.IsTestProject())
+			if (!projectItem.ContainingProject.IsTestProject() && projectItem.IsDirty)
 			{
 				var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
 				try

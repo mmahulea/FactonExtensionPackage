@@ -58,14 +58,14 @@
 		private void MenuItemCallback(object sender, EventArgs e)
 		{
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
-			ProjectItem condigProjectItem = null;
+			ProjectItem configProjectItem = null;
 			if (!string.IsNullOrWhiteSpace(this.moduleName))
 			{
-				condigProjectItem = dte.Solution.FindProjectItem(this.moduleName + ".config");
+				configProjectItem = dte.Solution.FindProjectItem(this.moduleName + ".config");
 			}
-			if (condigProjectItem != null)
+			if (configProjectItem != null)
 			{
-				condigProjectItem.OpenInEditor();
+				configProjectItem.OpenInEditor();
 			}
 			else
 			{

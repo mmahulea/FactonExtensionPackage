@@ -52,12 +52,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\UpdateModuleConfigFileCommand.cs" />
     <Compile Include="Extensions\EditPointExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="FormatingCommands\SubCommands\FactonizeModuleCommand.cs" />
-    <Compile Include="Services\ConfigFileEditorService.cs" />
     <Compile Include="Services\FactonizeService.cs" />
     <Compile Include="Services\ModuleClassService.cs" />
     <Compile Include="Services\ModuleSystemService.cs" />

@@ -67,14 +67,10 @@
 		{
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
 
-			ProjectItem condigProjectItem = null;
+			ProjectItem condigProjectItem = dte.ActiveDocument.ProjectItem;
 			if (!string.IsNullOrWhiteSpace(this.moduleName))
 			{
 				condigProjectItem = dte.Solution.FindProjectItem(this.moduleName + ".config");
-			}
-			if (condigProjectItem == null)
-			{
-				condigProjectItem = SearchService.FindModuleFromConfig(dte.ActiveDocument.ProjectItem);
 			}
 			if (condigProjectItem != null)
 			{

@@ -137,20 +137,19 @@
 			this.dte = (DTE)this.GetService(typeof(DTE));
 			this.AdviseSolutionEvents();
 			ModuleToolWindowCommand.Initialize(this);
-			Commands.FactonizeCtorsCommand.Initialize(this);
-			Commands.AddInheritDocCommand.Initialize(this);
+			FactonizeCtorsCommand.Initialize(this);
+			AddInheritDocCommand.Initialize(this);
 			SolutionExplorerCommands.InheritDocInSolutionExplorerCommand.Initialize(this);
 			SolutionExplorerCommands.FactonizeInSolutionExplorerCommand.Initialize(this);
 			SolutionExplorerCommands.FactonizeCtorsInSolutionExplorerCommand.Initialize(this);
-			FactonExtensionPackage.SolutionExplorerCommands.DeleteBinFolderCommand.Initialize(this);
-			FactonExtensionPackage.SolutionExplorerCommands.BuildFacton7DebugCommand.Initialize(this);
-			FactonExtensionPackage.SolutionExplorerCommands.GetBuildFacton7DebugCommand.Initialize(this);
-			FactonExtensionPackage.SolutionExplorerCommands.SolutionFolderDeleteBinFoldersCommand.Initialize(this);
-		    FactonExtensionPackage.SolutionExplorerCommands.FactonizeEverythingInProjectCommand.Initialize(this);
-		    FactonExtensionPackage.SolutionExplorerCommands.FactonizeEverythingInSolutionFolderCommand.Initialize(this);
-		    FactonExtensionPackage.SolutionExplorerCommands.FactonizePendingChangesInProjectCommand.Initialize(this);
-		    FactonExtensionPackage.SolutionExplorerCommands.FactonizePendingChangesInFolderSolutionCommand.Initialize(this);
-		    FactonExtensionPackage.Commands.UpdateModuleConfigFileCommand.Initialize(this);
+			SolutionExplorerCommands.DeleteBinFolderCommand.Initialize(this);
+			SolutionExplorerCommands.BuildFacton7DebugCommand.Initialize(this);
+			SolutionExplorerCommands.GetBuildFacton7DebugCommand.Initialize(this);
+			SolutionExplorerCommands.SolutionFolderDeleteBinFoldersCommand.Initialize(this);
+		    SolutionExplorerCommands.FactonizeEverythingInProjectCommand.Initialize(this);
+		    SolutionExplorerCommands.FactonizeEverythingInSolutionFolderCommand.Initialize(this);
+		    SolutionExplorerCommands.FactonizePendingChangesInProjectCommand.Initialize(this);
+		    SolutionExplorerCommands.FactonizePendingChangesInFolderSolutionCommand.Initialize(this);
 		}
 
 		protected override void Dispose(bool disposing)

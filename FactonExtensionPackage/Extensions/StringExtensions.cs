@@ -141,5 +141,21 @@
 			return from Match match in new Regex(regex, RegexOptions.Multiline | RegexOptions.Singleline).Matches(txt)
 				   select match.Groups[1].Value;
 		}
+
+		public static bool CompareAsConfigFile(this string file1, string file2)
+		{
+			var lines =
+				file1.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
+					.Select(l => l.Trim())
+					.Where(l => l.StartsWith("<requiredService ") || l.StartsWith("<dependingService ") || l.StartsWith("<providedService"))
+					.ToList();
+
+			if (lines.Any(line => !file2.Contains(line)))
+			{
+				return false;
+			}
+
+			return true;
+		}
 	}
 }
