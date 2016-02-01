@@ -12,6 +12,8 @@
 
 	public static class ModuleClassService
 	{
+		private static readonly Dictionary<string, string> serviceFullNameDictionary = new Dictionary<string, string>();
+
 		public static bool VerifyConfiguration(ProjectItem projectItem)
 		{
 			var configProjectItem = SearchService.FindConfigFromModule(projectItem);
@@ -40,14 +42,15 @@
 			return false;
 		}
 
-		public static string GenerateConfig(ProjectItem projectItem)
+		public static string GenerateConfig(ProjectItem module, ProjectItem config)
 		{
-			string fileTxt = projectItem.ReadAllText();
+			string moduleFileTxt = module.ReadAllText();
+			string configFileTxt = config.ReadAllText();
 
-			var requiredServices = GetReguiredServices(fileTxt);
-			var dependingServices = GetDependingServices(fileTxt);
-			var providedServices = GetProvidedServices(fileTxt);
-			string classType = GetClassType(projectItem);
+			var requiredServices = GetReguiredServices(moduleFileTxt);
+			var dependingServices = GetDependingServices(moduleFileTxt, configFileTxt);
+			var providedServices = GetProvidedServices(moduleFileTxt);
+			string classType = GetClassType(module);
 
 			requiredServices = requiredServices.Where(s => dependingServices.All(d => d.ServiceName != s.ServiceName)).ToList();
 
@@ -76,16 +79,20 @@
 			return requiredServices;
 		}
 
-		private static List<IDependingService> GetDependingServices(string fileTxt)
+		private static List<IDependingService> GetDependingServices(string fileTxt, string configFileTxt)
 		{
 			var dependingServices = new List<IDependingService>();
+
+			var currenRequiredServices = configFileTxt.Matches(@"\<requiredService name=\""(?<element>[^\""]+)\""").Distinct().ToList();
+			var currentDependingServices = configFileTxt.Matches(@"\<dependingService name=\""(?<element>[^\""]+)\""").Distinct().ToList();
 
 			var services = fileTxt.Matches(@".GetObject\<(?<element>[^\>]+)\>").Distinct();
 			foreach (var service in services)
 			{
-				if (service.EndsWith("Registry"))
+				var fullName = FindServiceFullName(service);
+
+				if (!currenRequiredServices.Contains(fullName) && (currentDependingServices.Contains(fullName) || service.EndsWith("Registry")))
 				{
-					var fullName = FindServiceFullName(service);
 					dependingServices.Add(new XmlDependingService { ServiceName = fullName });
 				}
 			}
@@ -114,7 +121,7 @@
 			List<IProvidedService> providedServices)
 		{
 			var stringBuilder = new StringBuilder();
-			stringBuilder.AppendLine(@"<?xml version=""1.0"" encoding=""utf - 8"" ?>");
+			stringBuilder.AppendLine(@"<?xml version=""1.0"" encoding=""utf-8""?>");
 			stringBuilder.AppendLine($"<moduleConfiguration type=\"{classType}\"");
 			stringBuilder.AppendLine(@"                     xmlns=""http://www.facton.com/infrastructure/modularity"">" + Environment.NewLine);
 
@@ -164,26 +171,31 @@
 			var dte = (DTE)Package.GetGlobalService(typeof(SDTE));
 			var interfaceName = serviceName.Split('.').Last();
 
-			var interfaceProjectItem = dte.Solution.FindProjectItem(interfaceName + ".cs");
-
-			if (interfaceProjectItem == null)
+			if (!serviceFullNameDictionary.ContainsKey(interfaceName))
 			{
-				throw new Exception($"Service {serviceName} not found in solution.");
-			}
-			var nameSpace = SearchService.FindNameSpace(interfaceProjectItem);
-			var fullName = nameSpace.Name + "." + interfaceName;
+				var interfaceProjectItem = dte.Solution.FindProjectItem(interfaceName + ".cs");
 
-			if (!fullName.EndsWith(serviceName))
-			{
-				throw new Exception($"Service {serviceName} not found in solution.");
+				if (interfaceProjectItem == null)
+				{
+					throw new Exception($"Service {serviceName} not found in solution.");
+				}
+				var nameSpace = SearchService.FindNameSpace(interfaceProjectItem);
+				var fullName = nameSpace.Name + "." + interfaceName;
+
+				if (!fullName.EndsWith(serviceName))
+				{
+					throw new Exception($"Service {serviceName} not found in solution.");
+				}
+
+				serviceFullNameDictionary.Add(interfaceName, fullName);
 			}
 
-			return fullName;
+			return serviceFullNameDictionary[interfaceName];
 		}
 
 		public static bool CompareTwoConfigFiles(string file1, string file2)
 		{
-			return file1.CompareAsConfigFile(file2) && file2.CompareAsConfigFile(file1);
+			return file1.CompareAsConfigFile(file2);
 		}
 	}
 }

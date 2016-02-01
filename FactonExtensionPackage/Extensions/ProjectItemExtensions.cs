@@ -36,7 +36,7 @@
 		public static void SetText(this ProjectItem projectItem, string text)
 		{
 			var objTextDoc = (TextDocument)projectItem.Document.Object("TextDocument");
-			var startPoint = objTextDoc.StartPoint.CreateEditPoint();
+			var startPoint = objTextDoc.EndPoint.CreateEditPoint();
 			startPoint.Insert(text);
 		}
 
@@ -50,6 +50,7 @@
 			var dte = projectItem.DTE;
 			var fullPath = projectItem.Properties.Item("FullPath").Value.ToString();
 			dte.ItemOperations.OpenFile(fullPath, Constants.vsViewKindTextView);
+			dte.ActiveDocument?.Activate();
 			dte.ExecuteCommand("SolutionExplorer.SyncWithActiveDocument");
 		}
 

@@ -226,6 +226,20 @@
 			}
 			return projects;
 		}
+
+		public static bool FormatDocument(this DTE dte)
+		{
+			try
+			{
+				dte.ActiveDocument?.Activate();
+				dte.ExecuteCommand("Edit.FormatDocument");
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 	}
 
 	public sealed class Utf8StringWriter : StringWriter

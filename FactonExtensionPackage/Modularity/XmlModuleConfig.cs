@@ -7,6 +7,7 @@
 	using System.Xml.Serialization;
 	using EnvDTE;
 	using FactonExtensionPackage.Extensions;
+	using Microsoft.VisualStudio;
 
 	[XmlRoot("moduleConfiguration", Namespace = "http://www.facton.com/infrastructure/modularity")]
 	public class XmlModuleConfig : IModuleConfig
@@ -105,11 +106,37 @@
 			}
 		}
 
-		//[XmlIgnore]
-		//public List<IModuleConfig> RequiredModules { get; set; }
+		public override bool Equals(object obj)
+		{
+			var config = obj as XmlModuleConfig;
+			if (config != null)
+			{
+				if (config.ProvidedServices.Count != this.ProvidedServices.Count || config.RequiredServices.Count != this.RequiredServices.Count
+					|| config.DependingServices.Count != this.DependingServices.Count)
+				{
+					return false;
+				}
 
-		//[XmlIgnore]
-		//public List<IModuleConfig> DependingModules { get; set; }
+				if (!config.requiredServices.All(s => this.requiredServices.Any(ss => ss.ServiceName == s.ServiceName)))
+				{
+					return false;
+				}
+
+				if (!config.dependingServices.All(s => this.dependingServices.Any(ss => ss.ServiceName == s.ServiceName)))
+				{
+					return false;
+				}
+
+				if (!config.providedServices.All(s => this.providedServices.Any(ss => ss.ServiceName == s.ServiceName)))
+				{
+					return false;
+				}
+
+				return true;
+			}
+
+			return base.Equals(obj);
+		}
 
 		[XmlIgnore]
 		public List<string> RequiredModulesNames
@@ -172,57 +199,6 @@
 
 			return string.Empty;
 		}
-
-		//[XmlIgnore]
-		//public List<IModuleConfig> DependingModules
-		//{
-		//	get
-		//	{
-		//		return this.dependingServices.Select(m => m.Service.ProvidedByModule).ToList();
-		//	}
-		//}
-
-		//[XmlIgnore]
-		//public List<IModuleConfig> RequiredModules
-		//{
-		//	get
-		//	{
-		//		return this.requiredServices.Select(m => m.Service.ProvidedByModule).ToList();
-		//	}
-		//}
-
-		//[XmlIgnore]
-		//public List<IModuleConfig> RequirementTree
-		//{
-		//	get
-		//	{
-		//		return this.GetRequiredModulesRecursively(this).ToList();
-		//	}
-		//}
-
-		//public IEnumerable<IModuleConfig> GetRequiredModulesRecursively(IModuleConfig moduleConfig)
-		//{
-		//	List<IModuleConfig> modules = new List<IModuleConfig>();
-		//	foreach (var requiredService in moduleConfig.RequiredServices)
-		//	{
-		//		var requiredModule = requiredService.Service.ProvidedByModule;
-		//		if (requiredModule != null)
-		//		{
-		//			modules.Add(requiredModule);
-		//			if (requiredService.RequirementType == RequirementType.Normal)
-		//			{
-		//				foreach (var service in requiredModule.RequiredServices)
-		//				{
-		//					if (service?.Service?.ProvidedByModule != null)
-		//					{
-		//						modules.AddRange(this.GetRequiredModulesRecursively(service.Service.ProvidedByModule));
-		//					}
-		//				}
-		//			}
-		//		}
-		//	}
-		//	return modules;
-		//}
 	}
 
 	public class Service

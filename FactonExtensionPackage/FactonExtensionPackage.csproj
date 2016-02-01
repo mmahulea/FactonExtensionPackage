@@ -52,6 +52,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateServiceVariableCommand.cs" />
+    <Compile Include="Commands\UpdateConfigCommand.cs" />
     <Compile Include="Extensions\EditPointExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />

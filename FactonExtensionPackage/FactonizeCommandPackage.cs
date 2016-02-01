@@ -150,6 +150,8 @@
 		    SolutionExplorerCommands.FactonizeEverythingInSolutionFolderCommand.Initialize(this);
 		    SolutionExplorerCommands.FactonizePendingChangesInProjectCommand.Initialize(this);
 		    SolutionExplorerCommands.FactonizePendingChangesInFolderSolutionCommand.Initialize(this);
+		    UpdateConfigCommand.Initialize(this);
+		    CreateServiceVariableCommand.Initialize(this);
 		}
 
 		protected override void Dispose(bool disposing)

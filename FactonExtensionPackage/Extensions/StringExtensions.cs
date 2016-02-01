@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Text;
 	using System.Text.RegularExpressions;
+	using FactonExtensionPackage.Modularity;
 	using static System.Char;
 
 	public static class Extensions
@@ -144,18 +145,10 @@
 
 		public static bool CompareAsConfigFile(this string file1, string file2)
 		{
-			var lines =
-				file1.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)
-					.Select(l => l.Trim())
-					.Where(l => l.StartsWith("<requiredService ") || l.StartsWith("<dependingService ") || l.StartsWith("<providedService"))
-					.ToList();
+			var config1 = file1.Deserialize<XmlModuleConfig>();
+			var config2 = file2.Deserialize<XmlModuleConfig>();
 
-			if (lines.Any(line => !file2.Contains(line)))
-			{
-				return false;
-			}
-
-			return true;
+			return config1.Equals(config2);
 		}
 	}
 }
